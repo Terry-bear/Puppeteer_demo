@@ -2,6 +2,7 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const gm = require("gm");
 
+const imageMagick = gm.subClass({imageMagick:true });
 const { readFiles } = require("./readF");
 
 const B_WIDTH = 1440;
@@ -41,7 +42,11 @@ console.log(IdArr);
       path: './dist/' + obj.ID + "/detail.png",
       fullPage: true,
     });
-    // gm('./dist/' + obj.ID + "/detail.png").chop(1215, 1200, 225);
+    // TODO 截图保存
+    imageMagick('./dist/' + obj.ID + "/detail.png").chop(225, 70, 0, 0)
+    .write(`./dist/${obj.ID}/fdetail.png`, function (err) {
+      if (!err) console.log('done');
+    });
     const Locus_btn = await page.$("button.ant-btn-primary");
     await Locus_btn.click();
     await page.waitFor(5000);
@@ -49,6 +54,10 @@ console.log(IdArr);
     await page.screenshot({
       path: "./dist/" + obj.ID + "/flowDetail.png",
       fullPage: true,
+    });
+    imageMagick(`./dist/${obj.ID}/flowDetail.png`).chop(460, 0, 0, 0)
+    .write(`./dist/${obj.ID}/fwdetail.png`, function (err) {
+      if (!err) console.log('done');
     });
     console.log('wancheng ..')
   }
